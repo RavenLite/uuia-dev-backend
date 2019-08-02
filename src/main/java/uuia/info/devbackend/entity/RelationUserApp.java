@@ -21,4 +21,8 @@ public class RelationUserApp {
 
     @Column(name = "authority")
     private int authority;
+
+    public int getId() {
+        return id;
+    }
 }

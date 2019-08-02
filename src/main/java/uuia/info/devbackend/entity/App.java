@@ -45,4 +45,8 @@ public class App {
     @Column(name = "status")
     private int status;
 
+
+    public int getId() {
+        return id;
+    }
 }

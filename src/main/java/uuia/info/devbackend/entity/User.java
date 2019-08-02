@@ -44,4 +44,20 @@ public class User implements Serializable {
     @Column(name = "comment")
     private String comment;
 
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
 }
