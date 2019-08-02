@@ -1,8 +1,6 @@
 package uuia.info.devbackend.entity;
 
-
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Data

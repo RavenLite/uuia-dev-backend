@@ -93,4 +93,8 @@ public class App {
     public int getStatus() {
         return status;
     }
+
+    public void setUuiaAppId(String uuiaAppId) {
+        this.uuiaAppId = uuiaAppId;
+    }
 }

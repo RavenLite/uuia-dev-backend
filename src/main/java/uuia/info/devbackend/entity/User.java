@@ -1,13 +1,9 @@
 package uuia.info.devbackend.entity;
 
-
 import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
-
 import javax.persistence.*;
-
 
 @Data
 @Entity
@@ -44,6 +40,12 @@ public class User implements Serializable {
     @Column(name = "comment")
     private String comment;
 
+    @Column(name = "state")
+    private int state;
+
+    @Column(name = "code")
+    private String code;
+
 
     public String getUsername() {
         return username;
@@ -59,5 +61,25 @@ public class User implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }
