@@ -42,4 +42,7 @@ public class App {
     @Column(name = "uuia_app_id")
     private String uuiaAppId;
 
+    @Column(name = "status")
+    private int status;
+
 }

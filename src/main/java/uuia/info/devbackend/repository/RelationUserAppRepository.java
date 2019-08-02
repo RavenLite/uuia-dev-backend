@@ -12,5 +12,5 @@ public interface RelationUserAppRepository extends JpaRepository<RelationUserApp
     List<RelationUserApp> findAllByAppId(int appId);
 
     RelationUserApp findByUserIdAndAppId(int userId, int appId);
-    
+
 }
