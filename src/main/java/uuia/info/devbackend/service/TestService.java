@@ -16,6 +16,7 @@ import java.util.List;
 
 @Service
 public class TestService {
+
     @Autowired
     AppRepository appRepository;
 
