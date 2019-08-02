@@ -93,4 +93,53 @@ public class App {
     public int getStatus() {
         return status;
     }
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
+    }
+
+    public void setWechatAppid(String wechatAppid) {
+        this.wechatAppid = wechatAppid;
+    }
+
+    public void setWechatAppSecret(String wechatAppSecret) {
+        this.wechatAppSecret = wechatAppSecret;
+    }
+
+    public void setQqAppid(String qqAppid) {
+        this.qqAppid = qqAppid;
+    }
+
+    public void setQqAppSecret(String qqAppSecret) {
+        this.qqAppSecret = qqAppSecret;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public void setUuiaAppId(String uuiaAppId) {
+        this.uuiaAppId = uuiaAppId;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }

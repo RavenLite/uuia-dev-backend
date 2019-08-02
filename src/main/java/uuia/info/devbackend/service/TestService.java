@@ -11,6 +11,7 @@ import uuia.info.devbackend.repository.AppRepository;
 import uuia.info.devbackend.repository.RelationUserAppRepository;
 import uuia.info.devbackend.repository.UserRepository;
 
+import javax.sound.midi.Soundbank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +98,9 @@ public class TestService {
 
 
     public boolean updateApp(App app){
+        if(app.getId()==0){
+            return false;
+        }
         if(checkUserVaild(app)){
             appRepository.save(app);
         }else {

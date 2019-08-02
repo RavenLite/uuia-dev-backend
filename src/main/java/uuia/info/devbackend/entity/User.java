@@ -23,6 +23,10 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "name")
+    private String name;
+
+
     @Column(name = "school")
     private String school;
 
@@ -100,5 +104,9 @@ public class User implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
