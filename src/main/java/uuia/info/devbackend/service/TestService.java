@@ -106,22 +106,20 @@ public class TestService {
         return appRepository.findById(appID);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     public static boolean checkUserVaild(User user){
+        if(user.getMail()== null || user.getPassword()==null || user.getUsername() == null || user.getPhone() == null){
+            return false;
+        }
         return true;
     }
     public static boolean checkUserVaild(App app){
+        if(app.getName() == null || app.getOwnerId() == 0 || app.getSecretKey() == null){
+            return false;
+        }
+
+        if ((app.getWechatAppid() == null || app.getWechatAppSecret() == null) && (app.getQqAppid() == null || app.getQqAppSecret() == null)) {
+            return false;
+        }
 
         return true;
     }

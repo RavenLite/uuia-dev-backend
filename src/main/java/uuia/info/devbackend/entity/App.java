@@ -49,4 +49,48 @@ public class App {
     public int getId() {
         return id;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getSecretKey() {
+        return secretKey;
+    }
+
+    public String getWechatAppid() {
+        return wechatAppid;
+    }
+
+    public String getWechatAppSecret() {
+        return wechatAppSecret;
+    }
+
+    public String getQqAppid() {
+        return qqAppid;
+    }
+
+    public String getQqAppSecret() {
+        return qqAppSecret;
+    }
+
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public String getUuiaAppId() {
+        return uuiaAppId;
+    }
+
+    public int getStatus() {
+        return status;
+    }
 }
