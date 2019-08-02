@@ -13,12 +13,11 @@ import uuia.info.devbackend.util.CommonResult;
 import uuia.info.devbackend.util.MailUtil;
 
 import javax.annotation.Resource;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static uuia.info.devbackend.util.ResultCode.E_701;
+import static uuia.info.devbackend.util.ResultCode.*;
 
 /**
  * @author raven, penapple
@@ -70,7 +69,7 @@ public class TestService {
     /**
      * 登录
      */
-    public String login(User user) {
+    public CommonResult<Object> login(User user) {
         user.setLastLogin(new Date());
         User standardUser;
         if (user.getMail() != null) {
@@ -80,31 +79,31 @@ public class TestService {
         } else if (user.getUsername() != null) {
             standardUser = userRepository.findByUsername(user.getUsername());
         } else {
-            return "用户名无效";
+            return CommonResult.fail(E_702);
         }
 
         if (standardUser != null) {
             if (user.getPassword().equals(standardUser.getPassword())) {
-                return "登录成功";
+                return CommonResult.success("登录");
             } else {
-                return "密码不正确";
+                return CommonResult.fail(E_703);
             }
         }
-        return "用户名不存在";
+        return CommonResult.fail(E_704);
 
     }
 
     /**
      * 获取用户基本信息
      */
-    public User getUserInfo(int userId) {
-        return userRepository.findById(userId);
+    public CommonResult<User> getUserInfo(int userId) {
+        return CommonResult.success(userRepository.findById(userId), "获取用户基本信息");
     }
 
     /**
      * 获取用户所有的APP子节点信息
      */
-    public JSONObject getUserAllApps(int userId) {
+    public CommonResult<JSONObject> getUserAllApps(int userId) {
         JSONObject appList = new JSONObject();
         List<App> appList1 = appRepository.findAllByOwnerId(userId);
         List<App> appList2 = new ArrayList<>();
@@ -114,38 +113,39 @@ public class TestService {
         }
         appList.put("own", appList1);
         appList.put("other", appList2);
-        return appList;
+
+        return CommonResult.success(appList, "获取用户所有的APP子节点信息");
     }
 
     /**
      * 新建子节点
      */
-    public boolean createApp(App app) {
+    public CommonResult<Object> createApp(App app) {
         if (checkAppVaild(app)) {
             appRepository.save(app);
         } else {
-            return false;
+            return CommonResult.fail(E_701);
         }
-        return true;
+        return CommonResult.success("新建子节点");
     }
 
     /**
      * 修改子节点信息
      */
-    public boolean updateApp(App app) {
+    public CommonResult<Object> updateApp(App app) {
         if (checkAppVaild(app)) {
             appRepository.save(app);
         } else {
-            return false;
+            return CommonResult.fail(E_701);
         }
-        return true;
+        return CommonResult.success("修改子节点");
     }
 
     /**
      * 查看子节点详情
      */
-    public App getAppDetail(String appID) {
-        return appRepository.findByUuiaAppId(appID);
+    public CommonResult<App> getAppDetail(String appID) {
+        return CommonResult.success(appRepository.findByUuiaAppId(appID), "修改子节点");
     }
 
     /**
