@@ -3,6 +3,7 @@ package uuia.info.devbackend.service;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import uuia.info.devbackend.entity.App;
 import uuia.info.devbackend.entity.RelationUserApp;
 import uuia.info.devbackend.entity.User;
@@ -13,6 +14,7 @@ import uuia.info.devbackend.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class TestService {
     @Autowired
     AppRepository appRepository;
@@ -120,7 +122,6 @@ public class TestService {
         if ((app.getWechatAppid() == null || app.getWechatAppSecret() == null) && (app.getQqAppid() == null || app.getQqAppSecret() == null)) {
             return false;
         }
-
         return true;
     }
 
