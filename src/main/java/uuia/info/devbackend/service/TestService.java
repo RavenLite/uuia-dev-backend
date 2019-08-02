@@ -10,9 +10,11 @@ import uuia.info.devbackend.repository.RelationUserAppRepository;
 import uuia.info.devbackend.repository.UserRepository;
 import uuia.info.devbackend.util.CodeUtil;
 import uuia.info.devbackend.util.CommonResult;
+import uuia.info.devbackend.util.JwtUtil;
 import uuia.info.devbackend.util.MailUtil;
 
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +43,8 @@ public class TestService {
         if (!checkUserVaild(user)) {
             return CommonResult.fail(E_701);
         }
-        //生成激活码
+
+        // 生成激活码
         String code = CodeUtil.generateUniqueCode();
         user.setCode(code);
         user.setState(0);
@@ -51,7 +54,12 @@ public class TestService {
         userRepository.save(user);
 
         // 通过线程的方式给用户发送一封邮件
-        new Thread(new MailUtil(user.getMail(), code)).start();
+        try {
+            MailUtil.send(user.getMail(), code);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            return CommonResult.fail(E_705);
+        }
 
         return CommonResult.success("注册");
     }
@@ -70,27 +78,34 @@ public class TestService {
      * 登录
      */
     public CommonResult<Object> login(User user) {
-        user.setLastLogin(new Date());
         User standardUser;
+
         if (user.getMail() != null) {
             standardUser = userRepository.findByMail(user.getMail());
+            standardUser.setLastLogin(new Date());
+            userRepository.save(standardUser);
         } else if (user.getPhone() != null) {
             standardUser = userRepository.findByPhone(user.getPhone());
+            standardUser.setLastLogin(new Date());
+            userRepository.save(standardUser);
         } else if (user.getUsername() != null) {
             standardUser = userRepository.findByUsername(user.getUsername());
+            standardUser.setLastLogin(new Date());
+            userRepository.save(standardUser);
         } else {
             return CommonResult.fail(E_702);
         }
 
-        if (standardUser != null) {
-            if (user.getPassword().equals(standardUser.getPassword())) {
-                return CommonResult.success("登录");
-            } else {
-                return CommonResult.fail(E_703);
-            }
-        }
-        return CommonResult.fail(E_704);
+        if (user.getPassword().equals(standardUser.getPassword())) {
+            JSONObject result = new JSONObject();
+            String token = JwtUtil.getToken(String.valueOf(standardUser.getId()));
+            result.put("token", token);
+            result.put("userId", standardUser.getId());
+            return CommonResult.success(result);
 
+        } else {
+            return CommonResult.fail(E_703);
+        }
     }
 
     /**
@@ -108,9 +123,11 @@ public class TestService {
         List<App> appList1 = appRepository.findAllByOwnerId(userId);
         List<App> appList2 = new ArrayList<>();
         List<RelationUserApp> relationUserAppList = relationUserAppRepository.findAllByUserId(userId);
+
         for (RelationUserApp relationUserApp : relationUserAppList) {
             appList2.add(appRepository.findById(relationUserApp.getId()));
         }
+
         appList.put("own", appList1);
         appList.put("other", appList2);
 
@@ -122,10 +139,20 @@ public class TestService {
      */
     public CommonResult<Object> createApp(App app) {
         if (checkAppVaild(app)) {
+            // 创建app
             appRepository.save(app);
+
+            // 创建关系
+            RelationUserApp relationUserApp = new RelationUserApp();
+            relationUserApp.setAppId(app.getId());
+            relationUserApp.setUserId(app.getOwnerId());
+            relationUserApp.setAuthority(1);
+            relationUserAppRepository.save(relationUserApp);
+
         } else {
             return CommonResult.fail(E_701);
         }
+
         return CommonResult.success("新建子节点");
     }
 
@@ -133,19 +160,24 @@ public class TestService {
      * 修改子节点信息
      */
     public CommonResult<Object> updateApp(App app) {
+        if(app.getId()==0){
+            return CommonResult.fail(E_701);
+        }
+
         if (checkAppVaild(app)) {
             appRepository.save(app);
         } else {
             return CommonResult.fail(E_701);
         }
+
         return CommonResult.success("修改子节点");
     }
 
     /**
      * 查看子节点详情
      */
-    public CommonResult<App> getAppDetail(String appID) {
-        return CommonResult.success(appRepository.findByUuiaAppId(appID), "修改子节点");
+    public CommonResult<App> getAppDetail(int appID) {
+        return CommonResult.success(appRepository.findById(appID), "查看子节点详情");
     }
 
     /**
@@ -156,11 +188,7 @@ public class TestService {
     }
 
     private static boolean checkAppVaild(App app) {
-        if (app.getName() == null || app.getOwnerId() == 0 || app.getSecretKey() == null) {
-            return false;
-        }
-
-        return (app.getWechatAppid() != null && app.getWechatAppSecret() != null) || (app.getQqAppid() != null && app.getQqAppSecret() != null);
+        return app.getName() != null && app.getOwnerId() != 0 && app.getSecretKey() != null;
     }
 
 }

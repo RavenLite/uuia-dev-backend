@@ -22,6 +22,9 @@ public class User implements Serializable {
     @Column(name = "school")
     private String school;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "id_number")
     private String idNumber;
 
@@ -81,5 +84,65 @@ public class User implements Serializable {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

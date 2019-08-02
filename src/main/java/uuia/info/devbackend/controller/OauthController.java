@@ -51,23 +51,21 @@ public class OauthController {
     }
 
     @ApiOperation(value ="新建子节点", notes = "新建子节点", httpMethod = "POST")
-    @RequestMapping(value = "/sub-node/{app-id}/create", method = RequestMethod.POST)
-    public CommonResult getUserInfo(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody App app, @PathVariable(value = "app-id") String uuiaAppId){
-        app.setUuiaAppId(uuiaAppId);
+    @RequestMapping(value = "/sub-node/create", method = RequestMethod.POST)
+    public CommonResult getUserInfo(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody App app){
         return testService.createApp(app);
     }
 
     @ApiOperation(value ="修改子节点信息", notes = "修改子节点信息", httpMethod = "POST")
-    @RequestMapping(value = "/sub-node/{app-id}/update", method = RequestMethod.POST)
-    public CommonResult updateApp(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody App app, @PathVariable(value = "app-id") String uuiaAppId){
-        app.setUuiaAppId(uuiaAppId);
+    @RequestMapping(value = "/sub-node/update", method = RequestMethod.POST)
+    public CommonResult updateApp(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody App app){
         return testService.updateApp(app);
     }
 
     @ApiOperation(value ="查看子节点详情", notes = "查看子节点详情", httpMethod = "GET")
     @RequestMapping(value = "/sub-node/{app-id}", method = RequestMethod.GET)
-    public CommonResult getAppDetail(@ApiParam(name="传入对象", value="传入json格式", required=true) @PathVariable(value = "app-id") String uuiaAppId){
-        return testService.getAppDetail(uuiaAppId);
+    public CommonResult getAppDetail(@ApiParam(name="传入对象", value="传入json格式", required=true) @PathVariable(value = "app-id") int appId){
+        return testService.getAppDetail(appId);
     }
 
 }
