@@ -1,7 +1,9 @@
 package uuia.info.devbackend.service;
 
 import com.alibaba.fastjson.JSONObject;
+import okhttp3.*;
 import org.springframework.stereotype.Service;
+import uuia.info.devbackend.component.IDGenerator;
 import uuia.info.devbackend.entity.App;
 import uuia.info.devbackend.entity.RelationUserApp;
 import uuia.info.devbackend.entity.User;
@@ -15,6 +17,9 @@ import uuia.info.devbackend.util.MailUtil;
 
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -139,6 +144,13 @@ public class TestService {
      */
     public CommonResult<Object> createApp(App app) {
         if (checkAppVaild(app)) {
+            // 生成uuiaAppId
+            String uuiaAppId = IDGenerator.generateAppId(new Date());
+            app.setUuiaAppId(uuiaAppId);
+            // 生成secretKey
+            String secretKey = sha256(uuiaAppId + System.currentTimeMillis() + app.getName());
+            app.setSecretKey(secretKey);
+
             // 创建app
             appRepository.save(app);
 
@@ -149,11 +161,38 @@ public class TestService {
             relationUserApp.setAuthority(1);
             relationUserAppRepository.save(relationUserApp);
 
+            // 与中央节点同步
+            updateApp(app);
+
         } else {
             return CommonResult.fail(E_701);
         }
 
-        return CommonResult.success("新建子节点");
+        return CommonResult.success(app);
+    }
+
+    private String sha256(String str) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] bytes = digest.digest(str.getBytes());
+            return toHex(bytes);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    private String toHex(byte[] bytes) {
+        StringBuilder str = new StringBuilder();
+        for (byte b : bytes) {
+            char[] chars = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+            char[] temp = new char[2];
+            temp[0] = chars[(b >>> 4) & 0x0F];
+            temp[1] = chars[b & 0x0F];
+
+            str.append(new String(temp));
+        }
+        return str.toString();
     }
 
     /**
@@ -170,7 +209,22 @@ public class TestService {
             return CommonResult.fail(E_701);
         }
 
+        // 与中央节点同步
+        updateApp(app);
+
         return CommonResult.success("修改子节点");
+    }
+
+    private void updateCenter(App app) throws IOException {
+        String url = "http://www.neuvwo.com/api/synchro";
+        OkHttpClient httpClient = new OkHttpClient();
+        MediaType mediaType = MediaType.parse("application/json;charset=UTF-8");
+        String post = JSONObject.toJSONString(app);
+
+        RequestBody requestBody = RequestBody.create(mediaType, post);
+
+        Request request = new Request.Builder().post(requestBody).url(url).build();
+        Response response = httpClient.newCall(request).execute();
     }
 
     /**
@@ -188,7 +242,7 @@ public class TestService {
     }
 
     private static boolean checkAppVaild(App app) {
-        return app.getName() != null && app.getOwnerId() != 0 && app.getSecretKey() != null;
+        return app.getName() != null && app.getOwnerId() != 0;
     }
 
 }

@@ -2,6 +2,7 @@ package uuia.info.devbackend.controller;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 import uuia.info.devbackend.entity.App;
 import uuia.info.devbackend.entity.User;
@@ -9,6 +10,8 @@ import uuia.info.devbackend.service.TestService;
 import uuia.info.devbackend.util.CommonResult;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 
 /**
  * @Author: Raven
@@ -39,9 +42,9 @@ public class OauthController {
     }
 
     @ApiOperation(value ="获取用户基本信息", notes = "获取用户基本信息", httpMethod = "GET")
-    @RequestMapping(value = "/{user-id}", method = RequestMethod.GET)
-        public CommonResult getUserInfo(@ApiParam(name="传入对象", value="传入json格式", required=true) @PathVariable(value = "user-id") int id){
-        return testService.getUserInfo(id);
+    @RequestMapping(value = "/me", method = RequestMethod.GET)
+    public CommonResult getUserInfo(@ApiParam(name="传入对象", value="传入json格式", required=true) HttpServletRequest request){
+        return testService.getUserInfo(Integer.valueOf((String) request.getAttribute("userId")));
     }
 
     @ApiOperation(value ="获取用户所有的APP子节点信息", notes = "获取我所有的APP子节点信息", httpMethod = "GET")

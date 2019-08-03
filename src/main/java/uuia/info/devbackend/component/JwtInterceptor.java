@@ -40,8 +40,7 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
         // 验证token
         try {
             Claims claims = JwtUtil.checkToken(token);
-            request.setAttribute("username", claims.getSubject());
-            String id = claims.getSubject();
+            request.setAttribute("userId", claims.getSubject());
         }catch (UserLoginInvalidException e) {
             resetResponse(response, E_604);
         } catch (UserLoginException e) {
