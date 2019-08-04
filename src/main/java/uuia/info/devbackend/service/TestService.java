@@ -96,7 +96,6 @@ public class TestService {
         return true;
     }
 
-
     public boolean updateApp(App app){
         if(app.getId()==0){
             return false;
