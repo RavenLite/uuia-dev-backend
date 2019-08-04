@@ -1,13 +1,9 @@
 package uuia.info.devbackend.entity;
 
-
 import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
-
 import javax.persistence.*;
-
 
 @Data
 @Entity
@@ -23,12 +19,11 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "name")
-    private String name;
-
-
     @Column(name = "school")
     private String school;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "id_number")
     private String idNumber;
@@ -48,6 +43,12 @@ public class User implements Serializable {
     @Column(name = "comment")
     private String comment;
 
+    @Column(name = "state")
+    private int state;
+
+    @Column(name = "code")
+    private String code;
+
 
     public String getUsername() {
         return username;
@@ -65,6 +66,25 @@ public class User implements Serializable {
         return phone;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -78,8 +98,16 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public String getSchool() {
+        return school;
+    }
+
     public void setSchool(String school) {
         this.school = school;
+    }
+
+    public String getIdNumber() {
+        return idNumber;
     }
 
     public void setIdNumber(String idNumber) {
@@ -94,19 +122,27 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public void setLastLogin(Date lastLogin) {
-        this.lastLogin = lastLogin;
+    public Date getLastLogin() {
+        return lastLogin;
     }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public String getComment() {
+        return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public int getState() {
+        return state;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

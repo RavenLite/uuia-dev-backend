@@ -34,14 +34,13 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
 
-        //取得token
+        // 取得token
         String token = authHeader.substring(7);
 
-        //验证token
+        // 验证token
         try {
             Claims claims = JwtUtil.checkToken(token);
-            request.setAttribute("username", claims.getSubject());
-            String id = claims.getSubject();
+            request.setAttribute("userId", claims.getSubject());
         }catch (UserLoginInvalidException e) {
             resetResponse(response, E_604);
         } catch (UserLoginException e) {

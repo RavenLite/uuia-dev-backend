@@ -94,6 +94,9 @@ public class App {
         return status;
     }
 
+    public void setUuiaAppId(String uuiaAppId) {
+        this.uuiaAppId = uuiaAppId;
+    }
 
     public void setId(int id) {
         this.id = id;
@@ -133,10 +136,6 @@ public class App {
 
     public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
-    }
-
-    public void setUuiaAppId(String uuiaAppId) {
-        this.uuiaAppId = uuiaAppId;
     }
 
     public void setStatus(int status) {
