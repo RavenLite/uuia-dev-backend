@@ -17,6 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        System.out.println("here");
 
         //添加拦截器//放掉某些特定不需要校验token的路由
         registry.addInterceptor(new JwtInterceptor()).excludePathPatterns("/sign-in", "/sign-up", "/activation");

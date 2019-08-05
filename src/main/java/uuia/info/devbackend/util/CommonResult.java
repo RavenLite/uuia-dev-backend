@@ -46,9 +46,7 @@ public class CommonResult<T> {
      */
     public static <T> CommonResult<T> fail(IErrorCode errorCode) {
         JSONObject data = new JSONObject();
-        data.put("code", errorCode.getCode());
-        data.put("message", errorCode.getMessage());
-        return new CommonResult<T>(ResultCode.FAILED.getCode(), ResultCode.FAILED.getMessage(), (T) data);
+        return new CommonResult<T>(errorCode.getCode(), errorCode.getMessage(), (T) data);
     }
 
     /**
@@ -58,10 +56,8 @@ public class CommonResult<T> {
      */
     public static <T> CommonResult<T> fail(IErrorCode errorCode, T detail) {
         JSONObject data = new JSONObject();
-        data.put("code", errorCode.getCode());
-        data.put("message", errorCode.getMessage());
         data.put("data", detail);
-        return new CommonResult<T>(ResultCode.FAILED.getCode(), ResultCode.FAILED.getMessage(), (T) data);
+        return new CommonResult<T>(errorCode.getCode(), errorCode.getMessage(), (T) data);
     }
 
     /**

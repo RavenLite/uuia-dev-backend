@@ -10,13 +10,9 @@ import uuia.info.devbackend.entity.User;
 import uuia.info.devbackend.repository.AppRepository;
 import uuia.info.devbackend.repository.RelationUserAppRepository;
 import uuia.info.devbackend.repository.UserRepository;
-import uuia.info.devbackend.util.CodeUtil;
-import uuia.info.devbackend.util.CommonResult;
-import uuia.info.devbackend.util.JwtUtil;
-import uuia.info.devbackend.util.MailUtil;
+import uuia.info.devbackend.util.*;
 
 import javax.annotation.Resource;
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -49,6 +45,16 @@ public class TestService {
             return CommonResult.fail(E_701);
         }
 
+        // 检验username是否存在
+        try {
+            if(userRepository.findByUsername(user.getUsername()).getUsername().equals(user.getUsername())) {
+                return CommonResult.fail(E_706);
+            }
+        } catch (NullPointerException ignored) {
+
+        }
+
+
         // 生成激活码
         String code = CodeUtil.generateUniqueCode();
         user.setCode(code);
@@ -59,12 +65,8 @@ public class TestService {
         userRepository.save(user);
 
         // 通过线程的方式给用户发送一封邮件
-        try {
-            MailUtil.send(user.getMail(), code);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-            return CommonResult.fail(E_705);
-        }
+        UUIAMailSender.sendRegisterActivationCodeMail(user.getMail(), user.getUsername(), code);
+//            MailUtil.send(user.getMail(), code);
 
         return CommonResult.success("注册");
     }
@@ -76,7 +78,7 @@ public class TestService {
         User user = userRepository.findByCode(code);
         user.setState(1);
         userRepository.save(user);
-        return CommonResult.success("激活");
+        return CommonResult.success("激活成功，请返回登录");
     }
 
     /**
