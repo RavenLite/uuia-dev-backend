@@ -24,6 +24,9 @@ public class App {
     @Column(name = "secret_key")
     private String secretKey;
 
+    @Column(name = "validation_key")
+    private String validationKey;
+
     @Column(name = "wechat_appid")
     private String wechatAppid;
 
@@ -140,5 +143,13 @@ public class App {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public String getValidationKey() {
+        return validationKey;
+    }
+
+    public void setValidationKey(String validationKey) {
+        this.validationKey = validationKey;
     }
 }

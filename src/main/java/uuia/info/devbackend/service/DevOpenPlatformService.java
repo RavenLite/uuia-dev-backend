@@ -26,7 +26,7 @@ import static uuia.info.devbackend.util.ResultCode.*;
  * @author raven, penapple
  */
 @Service
-public class TestService {
+public class DevOpenPlatformService {
     @Resource
     AppRepository appRepository;
 
@@ -144,16 +144,29 @@ public class TestService {
     /**
      * 新建子节点
      */
-    public CommonResult<Object> createApp(App app) {
+    public CommonResult<Object> createApp(App app, int userId) {
+        String validationKeyDev;
+        String uuiaAppId;
         if (checkAppVaild(app)) {
             // 生成uuiaAppId
-            String uuiaAppId = IDGenerator.generateAppId(new Date());
+            uuiaAppId = IDGenerator.generateAppId(new Date());
             app.setUuiaAppId(uuiaAppId);
-            // 生成secretKey
-            String secretKey = sha256(uuiaAppId + System.currentTimeMillis() + app.getName());
+
+            // secretKey明文(开发者存储)
+            String secretKeyDev = app.getSecretKey();
+            // secretKey密文(中心存储)
+            String secretKey = sha256(secretKeyDev + System.currentTimeMillis());
             app.setSecretKey(secretKey);
 
+            // validationKey明文(中心存储)
+            String validationKey = sha256(uuiaAppId + app.getName() + System.currentTimeMillis());
+            app.setValidationKey(validationKey);
+            // validationKey密文(开发者存储)
+            validationKeyDev = sha256(validationKey + System.currentTimeMillis());
+
             // 创建app
+            app.setOwnerId(userId);
+            app.setStatus(1);
             appRepository.save(app);
 
             // 创建关系
@@ -163,14 +176,17 @@ public class TestService {
             relationUserApp.setAuthority(1);
             relationUserAppRepository.save(relationUserApp);
 
-            // 与中央节点同步
-            updateApp(app);
+            // 发送子节点信息与中央节点同步
+//            updateCenter(app);
 
         } else {
             return CommonResult.fail(E_701);
         }
 
-        return CommonResult.success(app);
+        JSONObject result = new JSONObject();
+        result.put("validationKeyDev", validationKeyDev);
+        result.put("uuiaAppId", uuiaAppId);
+        return CommonResult.success(result);
     }
 
     private String sha256(String str) {
@@ -212,7 +228,7 @@ public class TestService {
         }
 
         // 与中央节点同步
-        updateApp(app);
+//        updateCenter(app);
 
         return CommonResult.success("修改子节点");
     }
