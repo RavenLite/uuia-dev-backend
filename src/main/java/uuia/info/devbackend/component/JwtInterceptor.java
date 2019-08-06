@@ -36,7 +36,6 @@ public class JwtInterceptor extends HandlerInterceptorAdapter {
 
         // 取得token
         String token = authHeader.substring(7);
-
         // 验证token
         try {
             Claims claims = JwtUtil.checkToken(token);
