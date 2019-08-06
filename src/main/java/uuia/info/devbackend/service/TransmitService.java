@@ -1,6 +1,5 @@
 package uuia.info.devbackend.service;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import uuia.info.devbackend.entity.App;
@@ -12,6 +11,7 @@ import java.io.IOException;
 @Service
 public class TransmitService {
 
+    public static final String subNodeUrl = "https://uuia-center.cheelem.com:8891/open-platform/sub-node";
     public static final String statisticUrl = "https://uuia-center.cheelem.com:8891/open-platform/statistics";
     public static final String logsUrl = "https://uuia-center.cheelem.com:8891/open-platform/logs";
 
@@ -52,5 +52,19 @@ public class TransmitService {
         }
     }
 
+    public CommonResult<Object> subNode(App app){
+        JSONObject object = (JSONObject) JSONObject.toJSON(JSONObject.toJSONString(app));
+        JSONObject result = null;
+        try {
+            result = new AppRequest().transmitPost(subNodeUrl, object);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(result!=null){
+            return CommonResult.success(result);
+        }else {
+            return CommonResult.fail();
+        }
+    }
 
 }

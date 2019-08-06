@@ -36,6 +36,9 @@ public class DevOpenPlatformService {
     @Resource
     UserRepository userRepository;
 
+    @Resource
+    TransmitService transmitService;
+
     /**
      * 注册
      */
@@ -177,7 +180,7 @@ public class DevOpenPlatformService {
             relationUserAppRepository.save(relationUserApp);
 
             // 发送子节点信息与中央节点同步
-//            updateCenter(app);
+            updateCenter(app);
 
         } else {
             return CommonResult.fail(E_701);
@@ -228,21 +231,13 @@ public class DevOpenPlatformService {
         }
 
         // 与中央节点同步
-//        updateCenter(app);
+        updateCenter(app);
 
         return CommonResult.success("修改子节点");
     }
 
-    private void updateCenter(App app) throws IOException {
-        String url = "http://www.neuvwo.com/api/synchro";
-        OkHttpClient httpClient = new OkHttpClient();
-        MediaType mediaType = MediaType.parse("application/json;charset=UTF-8");
-        String post = JSONObject.toJSONString(app);
-
-        RequestBody requestBody = RequestBody.create(mediaType, post);
-
-        Request request = new Request.Builder().post(requestBody).url(url).build();
-        Response response = httpClient.newCall(request).execute();
+    private void updateCenter(App app) {
+        transmitService.subNode(app);
     }
 
     /**
