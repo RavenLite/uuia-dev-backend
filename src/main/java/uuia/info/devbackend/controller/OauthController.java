@@ -75,13 +75,13 @@ public class OauthController {
     }
 
     @ApiOperation(value ="查看统计详情", notes = "查看统计详情", httpMethod = "POST")
-    @RequestMapping(value = "/statistic", method = RequestMethod.POST)
-    public CommonResult getAppStatistic(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestParam JSONObject requestJson){
+    @RequestMapping(value = "/sub-node/statistics", method = RequestMethod.POST)
+    public CommonResult getAppStatistic(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson){
         return transmitService.statistic(requestJson.getString("uuiaAppId"));
     }
 
     @ApiOperation(value ="查看日志详情", notes = "查看日志详情", httpMethod = "POST")
-    @RequestMapping(value = "/log", method = RequestMethod.POST)
+    @RequestMapping(value = "/sub-node/logs", method = RequestMethod.POST)
     public CommonResult getAppLog(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson){
         return transmitService.logs(requestJson.getString("uuiaAppId"),requestJson.getInteger("pageSize"), requestJson.getInteger("pageNum"));
     }

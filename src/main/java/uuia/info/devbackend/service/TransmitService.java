@@ -53,7 +53,7 @@ public class TransmitService {
     }
 
     public CommonResult<Object> subNode(App app){
-        JSONObject object = (JSONObject) JSONObject.toJSON(JSONObject.toJSONString(app));
+        JSONObject object = JSONObject.parseObject(JSONObject.toJSONString(app));
         JSONObject result = null;
         try {
             result = new AppRequest().transmitPost(subNodeUrl, object);
