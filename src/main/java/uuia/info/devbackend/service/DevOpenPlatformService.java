@@ -260,7 +260,7 @@ public class DevOpenPlatformService {
     }
 
     private static boolean checkAppVaild(App app) {
-        return app.getName() != null && app.getOwnerId() != 0;
+        return app.getName() != null;
     }
 
 }
