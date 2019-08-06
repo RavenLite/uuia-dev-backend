@@ -75,15 +75,15 @@ public class OauthController {
     }
 
     @ApiOperation(value ="查看统计详情", notes = "查看统计详情", httpMethod = "POST")
-    @RequestMapping(value = "/statistics", method = RequestMethod.POST)
-    public CommonResult getAppStatistic(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestParam JSONObject requestJson, HttpServletRequest request){
-        return transmitService.statistic(requestJson.getString("uuiaAppId"),Integer.valueOf((String) request.getAttribute("userId")));
+    @RequestMapping(value = "/sub-node/statistics", method = RequestMethod.POST)
+    public CommonResult getAppStatistics(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson, HttpServletRequest request){
+        return transmitService.statistics(requestJson.getString("uuiaAppId"), requestJson.getDate("startTime"), requestJson.getDate("endTime"), Integer.valueOf((String) request.getAttribute("userId")));
     }
 
     @ApiOperation(value ="查看日志详情", notes = "查看日志详情", httpMethod = "POST")
-    @RequestMapping(value = "/log", method = RequestMethod.POST)
-    public CommonResult getAppLog(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson, HttpServletRequest request){
-        return transmitService.logs(requestJson.getString("uuiaAppId"),requestJson.getInteger("pageSize"), requestJson.getInteger("pageNum"),Integer.valueOf((String) request.getAttribute("userId")));
+    @RequestMapping(value = "/sub-node/logs", method = RequestMethod.POST)
+    public CommonResult getAppLogs(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson, HttpServletRequest request){
+        return transmitService.logs(requestJson.getString("uuiaAppId"), requestJson.getInteger("pageSize"), requestJson.getInteger("pageNum"), Integer.valueOf((String) request.getAttribute("userId")));
     }
 
 }

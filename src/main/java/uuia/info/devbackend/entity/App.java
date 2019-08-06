@@ -28,16 +28,16 @@ public class App {
     private String validationKey;
 
     @Column(name = "wechat_appid")
-    private String wechatAppid;
+    private String wechatAppId;
 
     @Column(name = "wechat_app_secret")
-    private String wechatAppSecret;
+    private String wechatSecretKey;
 
     @Column(name = "qq_appid")
-    private String qqAppid;
+    private String qqAppId;
 
     @Column(name = "qq_app_secret")
-    private String qqAppSecret;
+    private String qqSecretKey;
 
     @Column(name = "owner_id")
     private int ownerId;
@@ -69,20 +69,20 @@ public class App {
         return secretKey;
     }
 
-    public String getWechatAppid() {
-        return wechatAppid;
+    public String getWechatAppId() {
+        return wechatAppId;
     }
 
-    public String getWechatAppSecret() {
-        return wechatAppSecret;
+    public String getWechatSecretKey() {
+        return wechatSecretKey;
     }
 
-    public String getQqAppid() {
-        return qqAppid;
+    public String getQqAppId() {
+        return qqAppId;
     }
 
-    public String getQqAppSecret() {
-        return qqAppSecret;
+    public String getQqSecretKey() {
+        return qqSecretKey;
     }
 
     public int getOwnerId() {
@@ -121,20 +121,20 @@ public class App {
         this.secretKey = secretKey;
     }
 
-    public void setWechatAppid(String wechatAppid) {
-        this.wechatAppid = wechatAppid;
+    public void setWechatAppId(String wechatAppId) {
+        this.wechatAppId = wechatAppId;
     }
 
-    public void setWechatAppSecret(String wechatAppSecret) {
-        this.wechatAppSecret = wechatAppSecret;
+    public void setWechatSecretKey(String wechatSecretKey) {
+        this.wechatSecretKey = wechatSecretKey;
     }
 
-    public void setQqAppid(String qqAppid) {
-        this.qqAppid = qqAppid;
+    public void setQqAppId(String qqAppId) {
+        this.qqAppId = qqAppId;
     }
 
-    public void setQqAppSecret(String qqAppSecret) {
-        this.qqAppSecret = qqAppSecret;
+    public void setQqSecretKey(String qqSecretKey) {
+        this.qqSecretKey = qqSecretKey;
     }
 
     public void setOwnerId(int ownerId) {

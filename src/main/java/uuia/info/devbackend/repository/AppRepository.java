@@ -14,9 +14,9 @@ public interface AppRepository extends JpaRepository<App,Integer> {
 
     App findByUuiaAppId(String uuiaAppId);
 
-    App findByWechatAppid(String wechatAppId);
+    App findByWechatAppId(String wechatAppId);
 
-    App findByQqAppid(String qqAppId);
+    App findByQqAppId(String qqAppId);
 
     App findById(int id);
 }

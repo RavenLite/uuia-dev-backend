@@ -10,6 +10,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import uuia.info.devbackend.util.SHAUtils;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 
 public class AppRequest {
@@ -23,14 +24,14 @@ public class AppRequest {
         client = HttpClientBuilder.create().build();
     }
 
-    public JSONObject transmitPost(String url,JSONObject object) throws IOException {
+    public JSONObject transmitPost(String url, JSONObject object) throws IOException {
         HttpPost post = new HttpPost(url);
         post.setHeader("Content-type", "application/json");
         Long timestamp = System.currentTimeMillis();
         object.put("signature", SHAUtils.encodeData(key+timestamp));
-        object.put("timestamp",String.valueOf(timestamp));
-        System.out.println(object.toJSONString());
-        post.setEntity(new StringEntity(object.toString()));
+        object.put("timestamp", String.valueOf(timestamp));
+        post.setEntity(new StringEntity(object.toString(), Charset.forName("UTF-8")));
+        System.out.println(object.toString());
         CloseableHttpResponse response;
         try {
             response = client.execute(post);
@@ -41,6 +42,7 @@ public class AppRequest {
         String responseContent = EntityUtils.toString(response.getEntity());
         response.close();
         post.releaseConnection();
+        System.out.println(responseContent);
         return JSON.parseObject(responseContent).getJSONObject("data");
     }
 

@@ -1,5 +1,6 @@
 package uuia.info.devbackend.service;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import uuia.info.devbackend.component.IDGenerator;
@@ -58,7 +59,6 @@ public class DevOpenPlatformService {
 
         }
 
-
         // 生成激活码
         String code = CodeUtil.generateUniqueCode();
         user.setCode(code);
@@ -70,7 +70,6 @@ public class DevOpenPlatformService {
 
         // 通过线程的方式给用户发送一封邮件
         UUIAMailSender.sendRegisterActivationCodeMail(user.getMail(), user.getUsername(), code);
-//            MailUtil.send(user.getMail(), code);
 
         return CommonResult.success("注册");
     }
@@ -140,7 +139,7 @@ public class DevOpenPlatformService {
         }
 
         appList.put("own", appList1);
-        appList.put("other", appList2);
+        appList.put("other", appList2.get(0)==null ? new JSONArray() : appList2);
 
         return CommonResult.success(appList, "获取用户所有的APP子节点信息");
     }
@@ -149,6 +148,7 @@ public class DevOpenPlatformService {
      * 新建子节点
      */
     public CommonResult<Object> createApp(App app, int userId) {
+        String secretKeyDev;
         String validationKeyDev;
         String uuiaAppId;
         if (checkAppVaild(app)) {
@@ -156,8 +156,8 @@ public class DevOpenPlatformService {
             uuiaAppId = IDGenerator.generateAppId(new Date());
             app.setUuiaAppId(uuiaAppId);
 
-            // secretKey明文(开发者存储)
-            String secretKeyDev = app.getSecretKey();
+            // 生成secretKey明文(开发者存储)
+            secretKeyDev = sha256(System.currentTimeMillis() + uuiaAppId + app.getUrl());
             // secretKey密文(中心存储)
             String secretKey = sha256(secretKeyDev + System.currentTimeMillis());
             app.setSecretKey(secretKey);
@@ -188,6 +188,7 @@ public class DevOpenPlatformService {
         }
 
         JSONObject result = new JSONObject();
+        result.put("secretKeyDev", secretKeyDev);
         result.put("validationKeyDev", validationKeyDev);
         result.put("uuiaAppId", uuiaAppId);
         return CommonResult.success(result);

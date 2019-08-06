@@ -3,17 +3,14 @@ package uuia.info.devbackend.service;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 import uuia.info.devbackend.entity.App;
-import uuia.info.devbackend.entity.RelationUserApp;
-import uuia.info.devbackend.entity.User;
 import uuia.info.devbackend.repository.AppRepository;
 import uuia.info.devbackend.repository.RelationUserAppRepository;
-import uuia.info.devbackend.repository.UserRepository;
 import uuia.info.devbackend.spider.AppRequest;
 import uuia.info.devbackend.util.CommonResult;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.List;
+import java.util.Date;
 
 @Service
 public class TransmitService {
@@ -23,23 +20,20 @@ public class TransmitService {
     @Resource
     RelationUserAppRepository relationUserAppRepository;
 
+    public static final String SUB_NODE_URL = "https://uuia-center.cheelem.com:8891/open-platform/sub-node";
+    public static final String STATISTICS_URL = "https://uuia-center.cheelem.com:8891/open-platform/statistics";
+    public static final String LOGS_URL = "https://uuia-center.cheelem.com:8891/open-platform/logs";
 
 
-    public static final String subNodeUrl = "https://uuia-center.cheelem.com:8891/open-platform/sub-node";
-    public static final String statisticUrl = "https://uuia-center.cheelem.com:8891/open-platform/statistics";
-    public static final String logsUrl = "https://uuia-center.cheelem.com:8891/open-platform/logs";
-
-
-    public CommonResult<Object> statistic(String uuiaAppId, Integer userId) {
-        if(!checkUserAuthority(uuiaAppId,userId)){
-            return CommonResult.fail();
-        }
+    public CommonResult<Object> statistics(String uuiaAppId, Date startTime, Date endTime, Integer userId) {
         JSONObject object = new JSONObject();
-        object.put("uuiaAppId",uuiaAppId);
-        object.put("appId",uuiaAppId);
+        object.put("uuiaAppId", uuiaAppId);
+        object.put("startTime", startTime);
+        object.put("endTime", endTime);
+        object.put("userId", userId);
         JSONObject result = null;
         try {
-            result = new AppRequest().transmitPost(statisticUrl,object);
+            result = new AppRequest().transmitPost(STATISTICS_URL,object);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,18 +44,15 @@ public class TransmitService {
         }
     }
 
-    public CommonResult<Object> logs(String uuiaAppId,Integer pageSize, Integer pageNum, Integer userId){
-        if(!checkUserAuthority(uuiaAppId,userId)){
-            return CommonResult.fail();
-        }
+    public CommonResult<Object> logs(String uuiaAppId, Integer pageSize, Integer pageNum, Integer userId){
         JSONObject object = new JSONObject();
-        object.put("uuiaAppId",uuiaAppId);
-        object.put("appId",uuiaAppId);
-        object.put("pageSize",pageSize);
-        object.put("pageNum",pageNum);
+        object.put("uuiaAppId", uuiaAppId);
+        object.put("userId", userId);
+        object.put("pageSize", pageSize);
+        object.put("pageNum", pageNum);
         JSONObject result = null;
         try {
-            result = new AppRequest().transmitPost(logsUrl,object);
+            result = new AppRequest().transmitPost(LOGS_URL,object);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,7 +67,7 @@ public class TransmitService {
         JSONObject object = JSONObject.parseObject(JSONObject.toJSONString(app));
         JSONObject result = null;
         try {
-            result = new AppRequest().transmitPost(subNodeUrl, object);
+            result = new AppRequest().transmitPost(SUB_NODE_URL, object);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,7 +79,7 @@ public class TransmitService {
     }
 
 
-    public boolean checkUserAuthority(String uuiaAppId,Integer userId){
+    public boolean checkUserAuthority(String uuiaAppId, Integer userId){
         App app = appRepository.findByUuiaAppId(uuiaAppId);
         if(app == null){
             return false;
