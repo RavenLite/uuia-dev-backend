@@ -1,7 +1,6 @@
 package uuia.info.devbackend.service;
 
 import com.alibaba.fastjson.JSONObject;
-import okhttp3.*;
 import org.springframework.stereotype.Service;
 import uuia.info.devbackend.component.IDGenerator;
 import uuia.info.devbackend.entity.App;
@@ -10,10 +9,12 @@ import uuia.info.devbackend.entity.User;
 import uuia.info.devbackend.repository.AppRepository;
 import uuia.info.devbackend.repository.RelationUserAppRepository;
 import uuia.info.devbackend.repository.UserRepository;
-import uuia.info.devbackend.util.*;
+import uuia.info.devbackend.util.CodeUtil;
+import uuia.info.devbackend.util.CommonResult;
+import uuia.info.devbackend.util.JwtUtil;
+import uuia.info.devbackend.util.UUIAMailSender;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
