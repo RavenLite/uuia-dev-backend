@@ -41,7 +41,7 @@ public class AppRequest {
         String responseContent = EntityUtils.toString(response.getEntity());
         response.close();
         post.releaseConnection();
-        return JSON.parseObject(responseContent);
+        return JSON.parseObject(responseContent).getJSONObject("data");
     }
 
     public void close() throws IOException {
