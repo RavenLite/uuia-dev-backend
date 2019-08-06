@@ -11,7 +11,6 @@ import uuia.info.devbackend.service.TransmitService;
 import uuia.info.devbackend.util.CommonResult;
 
 import javax.annotation.Resource;
-import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -76,15 +75,15 @@ public class OauthController {
     }
 
     @ApiOperation(value ="查看统计详情", notes = "查看统计详情", httpMethod = "POST")
-    @RequestMapping(value = "/statistic", method = RequestMethod.GET)
+    @RequestMapping(value = "/statistic", method = RequestMethod.POST)
     public CommonResult getAppStatistic(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestParam String uuiaAppId){
         return transmitService.statistic(uuiaAppId);
     }
 
     @ApiOperation(value ="查看日志详情", notes = "查看日志详情", httpMethod = "POST")
-    @RequestMapping(value = "/statistic", method = RequestMethod.GET)
-    public CommonResult getAppStatistic(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson){
-        return transmitService.logs(requestJson.getString("uuiaAppId"),requestJson.getInteger("pageSize"),requestJson.getInteger("pageNum"));
+    @RequestMapping(value = "/log", method = RequestMethod.POST)
+    public CommonResult getAppLog(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson){
+        return transmitService.logs(requestJson.getString("uuiaAppId"),requestJson.getInteger("pageSize"), requestJson.getInteger("pageNum"));
     }
 
 }
