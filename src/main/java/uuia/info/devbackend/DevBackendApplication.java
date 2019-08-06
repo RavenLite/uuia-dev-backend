@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EntityScan("uuia.info.devbackend.entity")
 @EnableJpaRepositories("uuia.info.devbackend.repository")
 public class DevBackendApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(DevBackendApplication.class, args);
     }
-
 }

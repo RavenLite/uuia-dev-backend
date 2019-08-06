@@ -1,14 +1,17 @@
 package uuia.info.devbackend.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.web.bind.annotation.*;
 import uuia.info.devbackend.entity.App;
 import uuia.info.devbackend.entity.User;
 import uuia.info.devbackend.service.DevOpenPlatformService;
+import uuia.info.devbackend.service.TransmitService;
 import uuia.info.devbackend.util.CommonResult;
 
 import javax.annotation.Resource;
+import javax.print.DocFlavor;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -20,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 public class OauthController {
     @Resource
     DevOpenPlatformService devOpenPlatformService;
+
+    @Resource
+    TransmitService transmitService;
 
     @ApiOperation(value ="注册", notes = "注册", httpMethod = "POST")
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
@@ -67,6 +73,18 @@ public class OauthController {
     @RequestMapping(value = "/sub-node/{app-id}", method = RequestMethod.GET)
     public CommonResult getAppDetail(@ApiParam(name="传入对象", value="传入json格式", required=true) @PathVariable(value = "app-id") int appId){
         return devOpenPlatformService.getAppDetail(appId);
+    }
+
+    @ApiOperation(value ="查看统计详情", notes = "查看统计详情", httpMethod = "POST")
+    @RequestMapping(value = "/statistic", method = RequestMethod.GET)
+    public CommonResult getAppStatistic(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestParam String uuiaAppId){
+        return transmitService.statistic(uuiaAppId);
+    }
+
+    @ApiOperation(value ="查看日志详情", notes = "查看日志详情", httpMethod = "POST")
+    @RequestMapping(value = "/statistic", method = RequestMethod.GET)
+    public CommonResult getAppStatistic(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson){
+        return transmitService.logs(requestJson.getString("uuiaAppId"),requestJson.getInteger("pageSize"),requestJson.getInteger("pageNum"));
     }
 
 }

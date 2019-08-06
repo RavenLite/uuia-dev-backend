@@ -16,11 +16,16 @@ public class TransmitService {
     public static final String logsUrl = "https://uuia-center.cheelem.com:8891/open-platform/logs";
 
 
-    public CommonResult<Object> statistic(String uuiaAppId) throws IOException {
+    public CommonResult<Object> statistic(String uuiaAppId) {
         JSONObject object = new JSONObject();
         object.put("uuiaAppId",uuiaAppId);
         object.put("appId",uuiaAppId);
-        JSONObject result = new AppRequest().transmitPost(statisticUrl,object);
+        JSONObject result = null;
+        try {
+            result = new AppRequest().transmitPost(statisticUrl,object);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if(result!=null){
             return CommonResult.success(result);
         }else {
@@ -28,13 +33,18 @@ public class TransmitService {
         }
     }
 
-    public CommonResult<Object> logs(String uuiaAppId,Integer pageSize, Integer pageNum) throws IOException {
+    public CommonResult<Object> logs(String uuiaAppId,Integer pageSize, Integer pageNum){
         JSONObject object = new JSONObject();
         object.put("uuiaAppId",uuiaAppId);
         object.put("appId",uuiaAppId);
         object.put("pageSize",pageSize);
         object.put("pageNum",pageNum);
-        JSONObject result = new AppRequest().transmitPost(logsUrl,object);
+        JSONObject result = null;
+        try {
+            result = new AppRequest().transmitPost(logsUrl,object);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if(result!=null){
             return CommonResult.success(result);
         }else {
