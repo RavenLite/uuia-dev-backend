@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * 全局支持跨域请求配置
@@ -13,7 +15,7 @@ import org.springframework.web.filter.CorsFilter;
  * @Date: 2019/8/2 10:20 AM
  */
 @Configuration
-public class GlobalCrossConfig {
+public class GlobalCrossConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public FilterRegistrationBean corsFilter() {
@@ -27,5 +29,14 @@ public class GlobalCrossConfig {
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
         bean.setOrder(0);
         return bean;
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                .maxAge(3600)
+                .allowCredentials(true);
     }
 }
