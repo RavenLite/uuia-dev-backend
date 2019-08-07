@@ -139,7 +139,13 @@ public class DevOpenPlatformService {
         }
 
         appList.put("own", appList1);
-        appList.put("other", appList2.get(0)==null ? new JSONArray() : appList2);
+        if (appList2.size() == 0) {
+            appList.put("other", new JSONArray());
+        } else if (appList2.get(0) == null) {
+            appList.put("other", new JSONArray());
+        } else {
+            appList.put("other", appList2);
+        }
 
         return CommonResult.success(appList, "获取用户所有的APP子节点信息");
     }
