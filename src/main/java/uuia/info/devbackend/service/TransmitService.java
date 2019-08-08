@@ -11,6 +11,9 @@ import uuia.info.devbackend.util.CommonResult;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+
+import static uuia.info.devbackend.util.ResultCode.E_707;
 
 @Service
 public class TransmitService {
@@ -23,6 +26,7 @@ public class TransmitService {
     public static final String SUB_NODE_URL = "https://uuia-center.cheelem.com:8891/open-platform/sub-node";
     public static final String STATISTICS_URL = "https://uuia-center.cheelem.com:8891/open-platform/statistics";
     public static final String LOGS_URL = "https://uuia-center.cheelem.com:8891/open-platform/logs";
+    public static final String PING_URL = "https://uuia-center.cheelem.com:8891/open-platform/sub-node/ping";
 
 
     public CommonResult<Object> statistics(String uuiaAppId, Date startTime, Date endTime, Integer userId) {
@@ -78,6 +82,29 @@ public class TransmitService {
         }
     }
 
+    public CommonResult<Object> ping(String uuiaAppId, Integer userId){
+        List<App> appList = appRepository.findAllByOwnerId(userId);
+        for (App app : appList) {
+            if (app.getUuiaAppId().equals(uuiaAppId)) {
+                JSONObject object = new JSONObject();
+                object.put("uuiaAppId", uuiaAppId);
+                object.put("userId", userId);
+                JSONObject result = null;
+                try {
+                    result = new AppRequest().transmitPost(PING_URL,object);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if(result!=null){
+                    return CommonResult.success(result);
+                }else {
+                    return CommonResult.fail();
+                }
+            }
+        }
+
+        return CommonResult.fail(E_707);
+    }
 
     public boolean checkUserAuthority(String uuiaAppId, Integer userId){
         App app = appRepository.findByUuiaAppId(uuiaAppId);

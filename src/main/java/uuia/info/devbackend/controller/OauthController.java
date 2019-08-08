@@ -86,4 +86,10 @@ public class OauthController {
         return transmitService.logs(requestJson.getString("uuiaAppId"), requestJson.getInteger("pageSize"), requestJson.getInteger("pageNum"), Integer.valueOf((String) request.getAttribute("userId")));
     }
 
+    @ApiOperation(value ="测试子节点连通性", notes = "查看日志详情", httpMethod = "POST")
+    @RequestMapping(value = "/sub-node/ping", method = RequestMethod.POST)
+    public CommonResult getAppPing(@ApiParam(name="传入对象", value="传入json格式", required=true) @RequestBody JSONObject requestJson, HttpServletRequest request){
+        return transmitService.ping(requestJson.getString("uuiaAppId"), Integer.valueOf((String) request.getAttribute("userId")));
+    }
+
 }

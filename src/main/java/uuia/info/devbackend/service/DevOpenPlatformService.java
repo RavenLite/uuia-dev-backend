@@ -65,6 +65,11 @@ public class DevOpenPlatformService {
         user.setState(0);
         user.setCreateTime(new Date());
 
+        // 密码哈希存储
+        String password = user.getPassword();
+        password = sha256(password + user.getUsername());
+        user.setPassword(password);
+
         // 将用户保存到数据库
         userRepository.save(user);
 
@@ -88,6 +93,7 @@ public class DevOpenPlatformService {
      * 登录
      */
     public CommonResult<Object> login(User user) {
+        user.setPassword(sha256(user.getPassword() + user.getUsername()));
         User standardUser;
 
         if (user.getMail() != null) {
