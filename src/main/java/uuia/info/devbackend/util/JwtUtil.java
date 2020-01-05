@@ -23,8 +23,8 @@ public class JwtUtil {
     // 私钥
     final static String BASE64_ENCODED_SECRET_KEY = "9f2unr1#@FF#@@$fqwadjkd1iodn";
 
-    // 过期时间,测试使用一小时
-    final static long TOKEN_EXP = 1000 * 60 * 60;
+    // 过期时间,七天
+    final static long TOKEN_EXP = 1000 * 60 * 60 * 24 * 7;
 
 
     public static String getToken(String userId) {
